@@ -1,0 +1,60 @@
+//Création
+POST http://localhost:8080/users
+Content-Type: application/json
+
+{"login":"toto", "password":"bobby"}
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 201, "Answer not expected");
+    });
+%}
+
+###
+
+//GET 1
+GET http://localhost:8080/users/1
+Content-Type: application/json
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 200, "Answer not expected");
+    });
+%}
+###
+
+//Remplace
+PUT http://localhost:8080/users/1
+Content-Type: application/json
+
+{"login":"blabla" , "password":"bobby"}
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 200, "Answer not expected");
+    });
+%}
+
+###
+
+//GET All
+GET http://localhost:8080/users
+Content-Type: application/json
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 200, "Answer not expected");
+    });
+%}
+###
+
+//Suppression
+DELETE http://localhost:8080/users/1
+Content-Type: application/json
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 204, "Answer not expected");
+    });
+%}
+###
