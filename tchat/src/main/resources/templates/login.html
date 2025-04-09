@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Spring Boot Thymeleaf Example</title>
+  <link href="/css/main.css" rel="stylesheet"/>
+</head>
+<body>
+
+<h2 th:text="${errorMessage ?: ''}"></h2>
+
+<!-- th:action="'/loginSubmit'" ou action="/loginSubmit" -->
+<form method="post" action="/loginSubmit" th:object="${userBean}">
+
+  <p>Login: <input th:field="*{login}" type="text"/></p>
+  <p>Password: <input th:field="*{password}" type="password"/></p>
+
+  <p><input type="submit" value="Submit"/></p>
+</form>
+
+</body>
+</html>

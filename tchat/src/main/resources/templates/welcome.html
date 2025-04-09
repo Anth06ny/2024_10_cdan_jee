@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Spring Boot Thymeleaf Example</title>
+  <link href="/css/main.css" rel="stylesheet"/>
+</head>
+<body>
+<h1 th:text="${message} + ' ' + ${student.name}" ></h1>
+
+<ul>
+  <li th:each="s : ${listStudent}" th:text="${s.name} + ' ' + ${s.note}" th:style="${s.note %2 == 0 ? 'color: #0000FF' : 'color: #FF00FF'} "></li>
+</ul>
+</body>
+</html>

@@ -1,10 +1,22 @@
 package org.example.tchat.restcontroller
 
 import org.example.tchat.model.StudentBean
+import org.example.tchat.model.TeacherBean
+import org.example.tchat.model.TeacherService
 import org.springframework.web.bind.annotation.*
 
 @RestController
-class MyRestController {
+class MyRestController(val teacherService: TeacherService) {
+
+    //http://localhost:8080/addTeacher?name=tata&code=8
+    @GetMapping("/addTeacher")
+    fun addTeacher(name:String , code:Int) : List<TeacherBean> {
+        println("/addTeacher name=$name code=$code")
+
+        teacherService.createTeacher(name, code)
+
+        return  teacherService.getAll()
+    }
 
     //http://localhost:8080/increment
 //Json Attendu : {"name": "toto","note": 12}
