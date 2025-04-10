@@ -1,0 +1,80 @@
+// --------------------
+// TEST PUBLIC
+// --------------------
+### /testPublic : Sans authentification
+GET http://localhost:8080/testPublic
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 200, "Answer not expected");
+    });
+%}
+
+### /testPublic : Avec authentification
+GET http://localhost:8080/testPublic
+Authorization: Basic aaa bbb
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 200, "Answer not expected");
+    });
+%}
+
+### /testPrivate : Sans authentification (401)
+GET http://localhost:8080/testPrivate
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 200 , "Answer not expected");
+    });
+%}
+
+### /testPrivate : Avec authentification
+GET http://localhost:8080/testPrivate
+Authorization: Basic aaa bbb
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 200, "Answer not expected");
+    });
+%}
+
+
+### /testPrivate : Avec authentification + role
+GET http://localhost:8080/testPrivate
+Authorization: Basic Admin Admin
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 200, "Answer not expected");
+    });
+%}
+
+### /testPrivateAdmin : Sans authentification (401)
+GET http://localhost:8080/testPrivateAdmin
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status == 200, "Answer not expected");
+    });
+%}
+
+### /testPrivateAdmin : Mauvais role (403)
+GET http://localhost:8080/testPrivateAdmin
+Authorization: Basic aaa bbb
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 200, "Answer not expected");
+    });
+%}
+
+### /testPrivateAdmin : Bon role
+GET http://localhost:8080/testPrivateAdmin
+Authorization: Basic Admin Admin
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 200, "Answer not expected");
+    });
+%}

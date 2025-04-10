@@ -32,12 +32,18 @@ dependencies {
 
     implementation("org.springframework.boot:spring-boot-starter-validation")
 
+//WebSocket
+    implementation("org.springframework.boot:spring-boot-starter-websocket")
+
 
     //Permet à JAVA de se connecter à une base SQL
     runtimeOnly("com.h2database:h2")
 
 //JPA Framework Java qui génère du SQL
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+
+    //Sécurité
+    implementation("org.springframework.boot:spring-boot-starter-security")
 }
 
 kotlin {

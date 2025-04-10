@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Chat WebSocket 2</title>
+  <style>
+    #messageArea {
+      width: 100%;
+      height: 300px;
+      border: 1px solid #ddd;
+      overflow: auto;
+      padding: 5px;
+    }
+
+    #messageInput {
+      width: 80%;
+    }
+
+    #sendButton {
+      width: 19%;
+    }
+  </style>
+</head>
+<body>
+<h2>Chat WebSocket 2</h2>
+
+<div id="messageArea"></div>
+<input id="messageInput" placeholder="Tapez votre message ici..." type="text"/>
+<input id="pseudoInput" placeholder="Pseudo ici" type="text"/>
+<div id="errorMessage" style="color: red;"></div>
+<button id="sendButton" onclick="sendMessage()">Envoyer</button>
+
+<script src="https://cdn.jsdelivr.net/sockjs/latest/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+
+<script>
+  let CHANNEL_NAME = "/ws/myChannel";
+  //Connexion au serveur de webSocket
+  let stompClient = Stomp.over(new SockJS('/ws/chat-app'));
+
+
+  stompClient.connect({}, function (frame) {
+    // On écoute un Channel
+    stompClient.subscribe(CHANNEL_NAME, function (messageOutput) {
+      let messageList = JSON.parse(messageOutput.body);
+      console.log(messageList)
+      updateMessageArea(messageList);
+    });
+  }, function (error) {
+    // Gestionnaire d'erreurs
+    alert("Une erreur s'est produite lors de la connexion WebSocket : " + error);
+  });
+
+  function sendMessage() {
+    let messageContent = document.getElementById('messageInput');
+    let pseudoInput = document.getElementById('pseudoInput');
+    let errorMessage = document.getElementById('errorMessage');
+
+
+    if (messageContent.value && pseudoInput.value) {
+      //Envoie du message sur l'url de reception de message
+      let messageJson = JSON.stringify({'pseudo': pseudoInput.value, 'message': messageContent.value})
+      stompClient.send("/ws/chat", {}, messageJson);
+      messageContent.value = '';
+      errorMessage.textContent = ''; // Effacer le message d'erreur
+    } else {
+      errorMessage.textContent = 'Veuillez remplir le pseudo et le message.';
+    }
+  }
+
+  function updateMessageArea(messages) {
+    var messageArea = document.getElementById('messageArea');
+    messageArea.innerHTML = '';
+    messages.forEach(function (message) {
+      var messageElement = document.createElement('div');
+      messageElement.appendChild(document.createTextNode(message.pseudo + ": " + message.message));
+      messageArea.appendChild(messageElement);
+    });
+  }
+</script>
+</body>
+</html>

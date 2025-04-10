@@ -1,0 +1,95 @@
+### /allMessages : Non Authentifié
+GET http://localhost:8080/tchat/allMessages
+Content-Type: application/json
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status == 401, "401 attendu. Ne dois pas fonctionner sans authentification");
+    });
+%}
+
+### /allMessages : Authentifié
+GET http://localhost:8080/tchat/allMessages
+Content-Type: application/json
+Authorization: Basic aaa bbb
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status == 200, "200 attendu");
+    });
+%}
+
+### /allMessages : mauvaise authentification
+GET http://localhost:8080/tchat/allMessages
+Content-Type: application/json
+Authorization: Basic aaa ccc
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status == 401, "401 attendu. Ne dois pas fonctionner avec une mauvaise authentification");
+    });
+%}
+
+
+### /saveMessage : Sans authentification
+POST http://localhost:8080/tchat/saveMessage
+Content-Type: application/json
+
+{
+  "message": "Toto",
+  "pseudo": "Coucou"
+}
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status == 401, "401 attendu. Ne dois pas fonctionner sans authentification");
+    });
+%}
+
+### /saveMessage : Mauvaise authentification
+POST http://localhost:8080/tchat/saveMessage
+Content-Type: application/json
+Authorization: Basic aaa ccc
+
+{
+  "message": "Toto",
+  "pseudo": "Coucou"
+}
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status == 401, "401 attendu. Ne doit pas fonctionner avec une mauvaise authentification");
+    });
+%}
+
+### /saveMessage : Authentification non admin
+POST http://localhost:8080/tchat/saveMessage
+Content-Type: application/json
+Authorization: Basic aaa bbb
+
+{
+  "message": "Toto",
+  "pseudo": "Coucou"
+}
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status == 403, "403 attendu. Ne doit fonctionner que pour l'admin");
+    });
+%}
+
+### /saveMessage : Authentification Admin
+POST http://localhost:8080/tchat/saveMessage
+Content-Type: application/json
+Authorization: Basic Admin Admin
+
+{
+  "message": "Toto",
+  "pseudo": "Coucou"
+}
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status == 200, "200 attendu. Doit fonctionner pour l'admin");
+    });
+%}

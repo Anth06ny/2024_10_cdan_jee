@@ -23,13 +23,7 @@ interface MessageRepository : JpaRepository<MessageBean, Long> {
 @Service
 class MessageService(val messageRepository:MessageRepository) {
 
-    fun addMessage(messageBean: MessageBean) {
-        if(messageBean.pseudo.isEmpty()) {
-            throw Exception("pseudo is empty")
-        }
-
-        messageRepository.save(messageBean)
-    }
+    fun addMessage(messageBean: MessageBean) = messageRepository.save(messageBean)
 
     fun findById(id:Long) = messageRepository.findByIdOrNull(id)
 
