@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="web" url="file://$PROJECT_DIR$/eUREKAsERVER" />
+    <file type="web" url="file://$PROJECT_DIR$/MoviesService" />
     <file type="web" url="file://$PROJECT_DIR$/ProgReactive" />
     <file type="web" url="file://$PROJECT_DIR$/tchat" />
   </component>

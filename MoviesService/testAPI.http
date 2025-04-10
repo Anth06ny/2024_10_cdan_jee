@@ -1,0 +1,63 @@
+### GET all movies
+GET http://localhost:8081/movies
+Accept: application/json
+
+> {%
+    client.test("Status code is 200", function () {
+        client.assert(response.status === 200, "Expected status 200");
+    });
+
+
+%}
+
+### POST create new movie
+POST http://localhost:8081/movies
+Content-Type: application/json
+
+{
+  "title": "Inglourious Basterds",
+  "length": 153
+}
+
+> {%
+    client.test("Movie created", function () {
+        client.assert(response.status === 201, "Expected status 201 for resource creation");
+        client.assert(response.headers["location"] !== undefined, "Location header should be present");
+    });
+%}
+
+### GET movie by ID (to test manually or after a POST)
+GET http://localhost:8081/movies/1
+Accept: application/json
+
+> {%
+    client.test("Movie retrieved", function () {
+        client.assert(response.status === 200, "Expected status 200");
+        const body = JSON.parse(response.body);
+        client.assert(body.title !== undefined, "Movie should have a title");
+    });
+%}
+
+### PUT update existing movie
+PUT http://localhost:8081/movies/1
+Content-Type: application/json
+
+{
+  "title": "Inglourious Basterds - Director's Cut",
+  "length": 160
+}
+
+> {%
+    client.test("Movie updated", function () {
+        client.assert(response.status === 200, "Expected status 200");
+    });
+%}
+
+### DELETE movie
+DELETE http://localhost:8081/movies/1
+
+> {%
+    client.test("Movie deleted", function () {
+        client.assert(response.status === 204, "Expected status 204 for delete");
+    });
+%}
